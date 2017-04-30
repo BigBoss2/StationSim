@@ -5,23 +5,18 @@ import aston.group17.model.*;
 import java.util.Random;
 
 public class Simulator {
-	private double t, p, q; //truck probability
+	private double t, p, q;
 	private Station station;
 	private Random rnd;
-//	private boolean newVehicle, vehicleLeft;
 	private Driver newDriver;
-	private double moneyGained, moneyLost, price;
-	private int totalVehicles, totalLostVehicles;
+	private boolean trucks;
 	
-	public Simulator(double p, double q, int pumps, int tills, double price)
+	public Simulator(double p, double q, int pumps, int tills, double price, boolean trucks)
 	{
 		t = 0.02;
 		this.p = p;
 		this.q = q;
-		this.price = price;
-
-		totalVehicles = 0;
-		totalLostVehicles = 0;
+		this.trucks = trucks;
 		
 		station = new Station(pumps, tills, price);
 		rnd = new Random();
@@ -29,29 +24,10 @@ public class Simulator {
 	
 	public void simulate()
 	{
-		
 		newDriver = generateDriver();
 		if(newDriver != null){
-			System.out.println("New Driver of "+newDriver.getVehicleType()+" approaching");
-			if(!station.addDriverToPumpQueue(newDriver))
-			{
-//				vehicleLeft = true;
-				setLost();
-				System.out.println("Couldn't Fit in pumps. Driver leaving");
-				incrementTotalLostVehicles();
-			}
-			else
-			{
-				incrementTotalVehicles();
-//				vehicleLeft = false;
-//				newVehicle = true;
-			}
-			System.out.println();
+			station.addDriverToPumpQueue(newDriver);
 		}
-//		else
-//		{
-//			newVehicle = false;
-//		}
 		
 		station.act();
 		System.out.println();
@@ -60,6 +36,8 @@ public class Simulator {
 	private Driver generateDriver(){
 		Driver tempDriver = null;
 		double random = rnd.nextDouble();
+//		System.out.println(random);
+		t = new TruckDriver().getProbability();
 		
 		if(random <= p){
 			tempDriver = new Driver("Car");
@@ -67,33 +45,14 @@ public class Simulator {
 			tempDriver = new Driver("Bike");
 		}else if(random <= 2*p + q){
 			tempDriver = new Driver("Sedan");
-		}else if(random <= 2*p + q + t){
-			tempDriver = new Driver("Truck");
+		}else if(random <= 2*p + q + t && trucks){
+			tempDriver = new TruckDriver();
 		}else{
 			return tempDriver;
 		}
+		System.out.println("boo2 "+ t);
+		System.out.println("aa: " + new TruckDriver().getAa());
 		return tempDriver;
-	}
-	
-//	public String toString()
-//	{
-//		String text = new String();
-//		if(newVehicle && !vehicleLeft)
-//		{
-//			text += "A new vehicle has entered";
-//		}
-//		else if(newVehicle)
-//		{
-//			text += "A vehicle couldn't fit.\n";
-//		}
-//
-//		text += "\n";
-//		return text;
-//	}
-	
-	private void setLost()
-	{
-		moneyLost += (newDriver.getVehicle().getTankSize() - newDriver.getVehicle().getTankFilled()) * price;
 	}
 	
 	public double countTakenMoney(){
@@ -102,27 +61,23 @@ public class Simulator {
 	
 	public double countLostMoney()
 	{
-		return moneyLost;
+		return station.getMoneyLost();
 	}
 	
-	public void resetStats(){
-		moneyLost = 0;
-		// moneyTaken = 0;
+	public double countLostSales()
+	{
+		return station.countLostSales();
 	}
 
 	public int getTotalVehicles() {
-		return totalVehicles;
-	}
-
-	private void incrementTotalVehicles() {
-		totalVehicles++;
+		return station.getTotalVehicles();
 	}
 
 	public int getTotalLostVehicles() {
-		return totalLostVehicles;
+		return station.getTotalLostVehicles();
 	}
 
-	private void incrementTotalLostVehicles() {
-		totalLostVehicles++;;
+	public void resetTruck() {
+		new TruckDriver().setProbability(0.02);
 	}
 }
