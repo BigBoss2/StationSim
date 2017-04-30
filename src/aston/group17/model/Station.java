@@ -40,7 +40,7 @@ public class Station {
 		
 		for(Pump p : pumps)
 		{
-			System.out.println(p.toString());
+//			System.out.println(p.toString());
 			if(p.getFirstDriver() != null)
 			{		
 				if(p.getFirstDriver().isDoneRefilling() && p.getFirstDriver().isAtPump())
@@ -105,7 +105,6 @@ public class Station {
 	/**
 	 * Adds vehicle to the shortest pump queue.
 	 * @param d The driver to be added to the pump queue
-	 * @return True if the Driver joined the Pump queue
 	 */
 	public void addDriverToPumpQueue(Driver d){
 		Pump shortestPump = getShortestPumpQueue(d.getVehicle());
@@ -117,7 +116,7 @@ public class Station {
 		}
 		else
 		{
-			System.out.println("Couldn't Fit in pumps. Driver leaving");
+//			System.out.println("Couldn't Fit in pumps. Driver leaving");
 			moneyLost += (d.getVehicle().getTankSize() - d.getVehicle().getTankFilled()) * fuelPrice;
 			totalLostVehicles++;
 		}

@@ -44,7 +44,7 @@ public class Pump {
 		else if(getFirstDriver().isDone())
 		{
 			removeDriver();
-			System.out.println("Driver is leaving");
+//			System.out.println("Driver is leaving");
 		}
 	}
 	
@@ -132,6 +132,9 @@ public class Pump {
 		return unitSpaceAvailable;
 	}
 	
+	/**
+	 * toString method overwriting the original toString
+	 */
 	public String toString()
 	{
 		String list = new String();

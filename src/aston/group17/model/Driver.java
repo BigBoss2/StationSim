@@ -77,7 +77,6 @@ public class Driver {
 				doneRefilling = true;
 				setShopSpendingAmount();
 				setShoppingTime();
-				setProbability();
 			}
 		}
 		incrementTotalTime();
@@ -166,7 +165,7 @@ public class Driver {
 
 		if(willShop(totalTime))
 		{
-			System.out.println("Did shop: "+ vehicleType);
+//			System.out.println("Did shop: "+ vehicleType);
 			didShop = true;
 			shoppingTime = vehicle.timeToSpendShopping();
 		}
@@ -203,7 +202,7 @@ public class Driver {
 		///}
 		else
 		{
-			System.out.println("Didn't shop: "+vehicleType);
+//			System.out.println("Didn't shop: "+vehicleType);
 			didShop = false;
 			shoppingTime = 0;
 		}}
@@ -399,11 +398,10 @@ public class Driver {
 		this.atPump = atPump;
 	}
 	
-	public void setProbability()
-	{
-		System.out.println("Is Normal");
-	}
-	
+	/**
+	 * Used for truckDriver's probability
+	 * @return always resets probability 
+	 */
 	public double getProbability()
 	{
 		return 0;
